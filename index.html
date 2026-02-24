@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test MiniKit</title>
+  <script src="https://cdn.jsdelivr.net/npm/@worldcoin/minikit-js@1.10.0/dist/minikit.umd.js"></script>
+  <style>body {margin:0; height:100vh; background:#000; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; font-family:sans-serif;}</style>
+</head>
+<body>
+  <h2>Test Bridge MiniKit 1.10.0</h2>
+  <p id="status">Estado: esperando...</p>
+  <p id="installed">isInstalled: esperando...</p>
+  <p id="count">Intentos: 0</p>
+  <button onclick="retry()">Reintentar</button>
+
+  <script>
+    let count = 0;
+    const statusEl = document.getElementById('status');
+    const installedEl = document.getElementById('installed');
+    const countEl = document.getElementById('count');
+
+    function update() {
+      statusEl.textContent = 'Estado: ' + (window.MiniKit?.status ?? 'no disponible');
+      installedEl.textContent = 'isInstalled: ' + (window.MiniKit?.isInstalled?.() ?? 'no disponible');
+      countEl.textContent = 'Intentos: ' + count;
+    }
+
+    function retry() {
+      count++;
+      if (window.MiniKit) window.MiniKit.install();
+      update();
+      setTimeout(update, 3000); // check después de 3s
+    }
+
+    // Inicio + auto cada 5s
+    retry();
+    setInterval(retry, 5000);
+  </script>
+</body>
+</html>
